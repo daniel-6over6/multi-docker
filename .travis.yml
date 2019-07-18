@@ -17,9 +17,7 @@ after_success:
   - docker build -t daniy/multi-server ./server
   - docker build -t daniy/multi-worker ./worker
   # Log in to the docker CLI
-  - echo "$DOCKER_PASSWORD"
-  - echo "$DOCKER_ID"
-  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
   - docker push daniy/multi-client
   - docker push daniy/multi-nginx
