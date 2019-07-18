@@ -10,9 +10,8 @@ script:
   - docker run -e CI=true daniy/react-test npm test
 
 after_success:
-  - umount /var/lib/docker/overlay2
-  - rm -rf /var/lib/docker
-  - docker build -t daniy/multi-client ./client
+  - docker system prune -a
+  - docker build --no-cache -t daniy/multi-client ./client
   - docker build -t daniy/multi-nginx ./nginx
   - docker build -t daniy/multi-server ./server
   - docker build -t daniy/multi-worker ./worker
