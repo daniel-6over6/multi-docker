@@ -1,0 +1,23 @@
+language: generic 
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t daniy/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true daniy/react-test npm test
+
+after_success:
+  - docker build -t daniy/multi-client ./client
+  - docker build -t daniy/multi-nginx ./nginx
+  - docker build -t daniy/multi-server ./server
+  - docker build -t daniy/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push daniy/multi-client
+  - docker push daniy/multi-nginx
+  - docker push daniy/multi-server
+  - docker push daniy/multi-worker
