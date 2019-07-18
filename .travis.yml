@@ -10,13 +10,13 @@ script:
   - docker run -e CI=true daniy/react-test npm test
 
 after_success:
-  - docker system prune -a
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker build --no-cache -t daniy/multi-client ./client
   - docker build -t daniy/multi-nginx ./nginx
   - docker build -t daniy/multi-server ./server
   - docker build -t daniy/multi-worker ./worker
   # Log in to the docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  
   # Take those images and push them to docker hub
   - docker push daniy/multi-client
   - docker push daniy/multi-nginx
